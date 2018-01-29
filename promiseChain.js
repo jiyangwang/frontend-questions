@@ -1,11 +1,55 @@
-var arr = [fn1, fn2, fn3];
+// https://medium.com/@ivantsov/promises-in-js-one-more-interview-question-6d59634a3463
 
-arr.reduce(function(acc, fn) {
-  return acc.then(function(val) {
-    return fn(val);  
-  })
-}, Promise.resolve()).then(function(res) {
+function foo() {
+  console.log('foo');
   
-}).catch(function(err) {
+  return new Promise(resolve => {
+    console.log('foo timeout before');
+    
+    setTimeout(() => {
+      console.log('foo timeout');
+
+      resolve('foo resolved');
+    }, 1000);
+    
+    console.log('foo timeout after');
+  });
+}
+
+function bar() {
+  console.log('bar');
   
+  return new Promise(resolve => {
+    console.log('bar timeout before');
+    
+    setTimeout(() => {
+      console.log('bar timeout');
+      
+      resolve('bar resolved');
+    }, 3000);
+    
+    console.log('bar timeout after');
+  });
+}
+
+foo().then(function(res) {
+  console.log('inside then 1: ' + res);
+  return bar();
+}).then(function(res) {
+  console.log('inside then 2: ' + res);
 })
+
+foo().then(bar).then(function(res) {
+  console.log('inside then 2: ' + res);
+});
+
+foo().then(bar()).then(function(res) {
+  console.log('inside then 2: ' + res);
+})
+
+foo().then(function(res) {
+  console.log('inside then 1: ' + res);
+  bar();
+}).then(function(res) {
+  console.log('inside then 2: ' + res);
+});
