@@ -49,7 +49,7 @@ var tasks = [
   asyncTask(3),
   asyncTask(4),
   asyncTask(5)
-  ];
+];
 
 // run the async tasks in parallel limit
 parallelLimit(tasks, 3, console.log);
